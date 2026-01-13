@@ -1,5 +1,31 @@
 # @enzymefinance/environment
 
+## 6.3.90
+
+### Patch Changes
+
+- [#851](https://github.com/enzymefinance/sdk/pull/851) [`2e38815`](https://github.com/enzymefinance/sdk/commit/2e38815a2e37dbde1ff0cde89433683472f0b961) Thanks [@KedziaPawel](https://github.com/KedziaPawel)! - Add pmUSD
+
+## 6.3.89
+
+### Patch Changes
+
+- [#844](https://github.com/enzymefinance/sdk/pull/844) [`5bf6df8`](https://github.com/enzymefinance/sdk/commit/5bf6df82094fd7561c3a71333a5188f8fa37edcb) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - deregister pzeth due to deprecated price feed
+
+- [#847](https://github.com/enzymefinance/sdk/pull/847) [`247f3be`](https://github.com/enzymefinance/sdk/commit/247f3bec782e0a2f18f361a77160cb8fed783e30) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - deregister DPI related tokens on Ethereum and Polygon
+
+## 6.3.88
+
+### Patch Changes
+
+- [#845](https://github.com/enzymefinance/sdk/pull/845) [`2c7332f`](https://github.com/enzymefinance/sdk/commit/2c7332f9b061d5a87376192ffd951c499450b012) Thanks [@gabrocheleau](https://github.com/gabrocheleau)! - Update LMAX marketmaker
+
+## 6.3.87
+
+### Patch Changes
+
+- [#842](https://github.com/enzymefinance/sdk/pull/842) [`d519093`](https://github.com/enzymefinance/sdk/commit/d519093f0dbe5134df5213f21a151ed9e6470e98) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - Rename USD0++ name and symbol
+
 ## 6.3.86
 
 ### Patch Changes
