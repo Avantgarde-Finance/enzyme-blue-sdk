@@ -1,5 +1,23 @@
 # @enzymefinance/environment
 
+## 6.3.93
+
+### Patch Changes
+
+- [#849](https://github.com/enzymefinance/sdk/pull/849) [`4488441`](https://github.com/enzymefinance/sdk/commit/4488441443142831d161313d600cc16c351daf35) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - deregister badger and perp on ethereum and gns and badger on polygon
+
+## 6.3.92
+
+### Patch Changes
+
+- [#855](https://github.com/enzymefinance/sdk/pull/855) [`c0b4454`](https://github.com/enzymefinance/sdk/commit/c0b4454ba3277cc51883bd6f4ff48214f4464189) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - add AVGWETHcons asset on ethereum network
+
+## 6.3.91
+
+### Patch Changes
+
+- [#853](https://github.com/enzymefinance/sdk/pull/853) [`4fed714`](https://github.com/enzymefinance/sdk/commit/4fed714435dd9b2a62d59294a5619f38ffb44147) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - add AVGUSDCcons asset to ethereum
+
 ## 6.3.90
 
 ### Patch Changes

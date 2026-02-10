@@ -1202,13 +1202,11 @@ export default defineAssetList(Network.ETHEREUM, [
     decimals: 18,
     id: "0x3472a5a71965499acd81997a54bba8d852c6e53d",
     name: "Badger",
-    releases: [sulu, encore, phoenix],
+    releases: [encore, phoenix],
     symbol: "BADGER",
     type: AssetType.PRIMITIVE,
     priceFeed: {
-      type: PriceFeedType.PRIMITIVE_CHAINLINK,
-      aggregator: "0x58921ac140522867bf50b9e009599da0ca4a2379",
-      rateAsset: RateAsset.ETH,
+      type: PriceFeedType.NONE,
     },
   },
   {
@@ -4038,13 +4036,11 @@ export default defineAssetList(Network.ETHEREUM, [
     decimals: 18,
     id: "0xbc396689893d065f41bc2c6ecbee5e0085233447",
     name: "Perpetual",
-    releases: [sulu, encore, phoenix],
+    releases: [encore, phoenix],
     symbol: "PERP",
     type: AssetType.PRIMITIVE,
     priceFeed: {
-      type: PriceFeedType.PRIMITIVE_CHAINLINK,
-      aggregator: "0x3b41d5571468904d4e53b6a8d93a6bac43f02dc9",
-      rateAsset: RateAsset.ETH,
+      type: PriceFeedType.NONE,
     },
   },
   {
@@ -7977,6 +7973,34 @@ export default defineAssetList(Network.ETHEREUM, [
     decimals: 18,
     priceFeed: {
       type: PriceFeedType.NONE,
+    },
+  },
+  {
+    symbol: "AVGUSDCcons",
+    name: "Avantgarde USDC Conservative",
+    id: "0xebbae8cfabb0092d5b32f00ebee0c8139d24ddcd",
+    type: AssetType.ERC_4626,
+    protocol: Erc4626Protocol.MORPHO,
+    releases: [sulu],
+    decimals: 18,
+    underlying: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    priceFeed: {
+      type: PriceFeedType.DERIVATIVE_ERC4626,
+      address: "0x66aa5b2fdfb453f8a27f9bd1d9124947ef3886bb",
+    },
+  },
+  {
+    symbol: "AVGWETHcons",
+    name: "Avantgarde WETH Conservative",
+    id: "0x132fe294ea9b6fad8ca00554d211d5f2b905c1ad",
+    type: AssetType.ERC_4626,
+    protocol: Erc4626Protocol.MORPHO,
+    releases: [sulu],
+    decimals: 18,
+    underlying: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    priceFeed: {
+      type: PriceFeedType.DERIVATIVE_ERC4626,
+      address: "0x66aa5b2fdfb453f8a27f9bd1d9124947ef3886bb",
     },
   },
 ]);
