@@ -1,5 +1,31 @@
 # @enzymefinance/environment
 
+## 6.3.96
+
+### Patch Changes
+
+- [#865](https://github.com/enzymefinance/sdk/pull/865) [`729b78d`](https://github.com/enzymefinance/sdk/commit/729b78d0dc4b78188cae24ac68222e31d8049775) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - add AVGUSDCdyn to ethereum
+
+- [#867](https://github.com/enzymefinance/sdk/pull/867) [`b5d6a55`](https://github.com/enzymefinance/sdk/commit/b5d6a551a5d051f8e57ac7b07a1475777b5ebbe9) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - change swETH price feed address on arbitrum
+
+- [#866](https://github.com/enzymefinance/sdk/pull/866) [`5326fe2`](https://github.com/enzymefinance/sdk/commit/5326fe2f7aaaffea938de78cdb19ebca7a2f5f2e) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - register USDnr asset on ethereum
+
+- [#864](https://github.com/enzymefinance/sdk/pull/864) [`37b7f67`](https://github.com/enzymefinance/sdk/commit/37b7f67d3f1511dd5be9d78459e62fe74b448f3c) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - deregister ALCX and DODO assets on polygon due to deprecating price feeds
+
+## 6.3.95
+
+### Patch Changes
+
+- [#868](https://github.com/enzymefinance/sdk/pull/868) [`a0871ef`](https://github.com/enzymefinance/sdk/commit/a0871ef5498eb21de460f745fddfce9dd69b77e1) Thanks [@KedziaPawel](https://github.com/KedziaPawel)! - Add shares splitter factory on Base and Arbitrum
+
+## 6.3.94
+
+### Patch Changes
+
+- [#861](https://github.com/enzymefinance/sdk/pull/861) [`4a4f026`](https://github.com/enzymefinance/sdk/commit/4a4f026a19c2913841c437c8e7ee3b69397621c8) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - deregister bal asset on arbitrum
+
+- [#860](https://github.com/enzymefinance/sdk/pull/860) [`ef6431c`](https://github.com/enzymefinance/sdk/commit/ef6431c7c0cd085526e1b74d2ff69e719be3a512) Thanks [@saurabhfegade](https://github.com/saurabhfegade)! - deregister maticx, stmatic and related assets in polygon due to deprecated price feeds
+
 ## 6.3.93
 
 ### Patch Changes
