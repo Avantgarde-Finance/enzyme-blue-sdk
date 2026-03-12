@@ -74,7 +74,7 @@ function main() {
     console.log();
   });
 
-  console.log("Done. Review and submit the above transactions from the vault owner.");
+  console.log("Done. Review and submit the above transactions.");
 }
 
 main();
