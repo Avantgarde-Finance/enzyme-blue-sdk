@@ -11,12 +11,17 @@
 
 import { IUnpermissionedActionsWrapper } from "@enzymefinance/abis";
 import { Tools, Vault } from "@enzymefinance/sdk";
-import { http, type Address, createPublicClient, encodeFunctionData } from "viem";
+import { http, type Address, type Hex, createPublicClient, encodeFunctionData, parseAbi } from "viem";
 import { readContract } from "viem/actions";
 import { mainnet } from "viem/chains";
 
 // Configuration
 const UNPERMISSIONED_ACTIONS_WRAPPER = "0xcfab4fcbfe059d5c1840d9dc285a9bfa0f96a118" as Address; // Ethereum mainnet
+const MULTICALL3 = "0xcA11bde05977b3631167028862bE2a173976CA11" as Address; // Mainnet Multicall3
+const RPC_URL = process.env.RPC_URL;
+const MULTICALL3_ABI = parseAbi([
+  "function aggregate3((address target,bool allowFailure,bytes callData)[] calls) payable returns ((bool success,bytes returnData)[] returnData)",
+]);
 
 // Fee routing data: finalRecipient -> vaultProxy -> feeSplitters[]
 // feeSplitters[] = [] means "direct to finalRecipient, no splitter hop"
@@ -55,7 +60,7 @@ export const FEE_ROUTING: Record<Address, Record<Address, Array<Address>>> = {
 // Create a public client for Ethereum mainnet
 const publicClient = createPublicClient({
   chain: mainnet,
-  transport: http(),
+  transport: http(RPC_URL),
 });
 
 /**
@@ -75,24 +80,33 @@ function getAllVaultProxies(): Array<Address> {
  * Main function to generate transaction data for settling and claiming fees
  */
 async function main() {
+  console.log(`Using RPC: ${RPC_URL ?? "default mainnet RPC (cloudflare-eth.com)"}`);
   const vaultProxies = getAllVaultProxies();
+  console.log(`Discovered ${vaultProxies.length} unique vaults in FEE_ROUTING.`);
 
   const transactions: Array<{
     vaultProxy: Address;
     comptrollerProxy: Address;
     continuousFees: Array<Address>;
-    txData: string;
+    txData: Hex;
   }> = [];
 
   // =========================================================================
   // PART 1: Settle and claim all fees from funds
   // =========================================================================
+  const part1Stats = {
+    processed: 0,
+    withContinuousFees: 0,
+    withoutContinuousFees: 0,
+    failed: 0,
+  };
 
   for (let i = 0; i < vaultProxies.length; i++) {
     const vaultProxy = vaultProxies[i];
     if (!vaultProxy) {
       continue;
     }
+    part1Stats.processed += 1;
     try {
       // Step 1: Get comptroller proxy
       const comptrollerProxy = await Vault.getComptrollerProxy(publicClient, {
@@ -108,8 +122,16 @@ async function main() {
       });
 
       if (continuousFeeAddresses.length === 0) {
+        part1Stats.withoutContinuousFees += 1;
+        console.log(
+          `[PART1][NO_FEES] vault=${vaultProxy} comptroller=${comptrollerProxy} continuousFees=0`,
+        );
         continue;
       }
+      part1Stats.withContinuousFees += 1;
+      console.log(
+        `[PART1][HAS_FEES] vault=${vaultProxy} comptroller=${comptrollerProxy} continuousFees=${continuousFeeAddresses.length}`,
+      );
 
       // Step 3: Generate transaction data
       const settleTx = Tools.UnpermissionedActionsWrapper.invokeContinuousFeeHookAndPayoutSharesOutstandingForFund({
@@ -131,17 +153,50 @@ async function main() {
         txData,
       });
     } catch (error) {
-      // Error processing vault - silently continue
+      part1Stats.failed += 1;
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`[PART1][ERROR] vault=${vaultProxy} error=${message}`);
     }
   }
 
   // =========================================================================
   // Transaction data for Part 1 is stored in the transactions array
   // =========================================================================
+  console.log(
+    `Part 1 stats: processed=${part1Stats.processed} withFees=${part1Stats.withContinuousFees} withoutFees=${part1Stats.withoutContinuousFees} failed=${part1Stats.failed}`,
+  );
   console.log("=== PART 1: Settle + Claim Fund Fees (wallet-ready transactions) ===");
   if (transactions.length === 0) {
     console.log("No fee-settlement transactions generated.");
   } else {
+    const batchedCalls = transactions.map((tx) => ({
+      target: UNPERMISSIONED_ACTIONS_WRAPPER,
+      allowFailure: false,
+      callData: tx.txData,
+    }));
+    const batchedSettleTxData = encodeFunctionData({
+      abi: MULTICALL3_ABI,
+      functionName: "aggregate3",
+      args: [batchedCalls],
+    });
+
+    console.log("Single batched tx for all settle+claim calls:");
+    console.log(
+      JSON.stringify(
+        {
+          type: "batchSettleAndClaimContinuousFees",
+          callCount: batchedCalls.length,
+          walletTx: {
+            to: MULTICALL3,
+            data: batchedSettleTxData,
+            value: "0",
+          },
+        },
+        null,
+        2,
+      ),
+    );
+
     for (const tx of transactions) {
       console.log(
         JSON.stringify(
@@ -173,7 +228,7 @@ async function main() {
     batch: Array<{
       feeSplitter: Address;
       vaultProxy: Address;
-      txData: string;
+      txData: Hex;
     }>;
   }> = [];
 
@@ -181,7 +236,7 @@ async function main() {
     const batch: Array<{
       feeSplitter: Address;
       vaultProxy: Address;
-      txData: string;
+      txData: Hex;
     }> = [];
 
     for (const [vaultProxy, feeSplitters] of Object.entries(vaults)) {
