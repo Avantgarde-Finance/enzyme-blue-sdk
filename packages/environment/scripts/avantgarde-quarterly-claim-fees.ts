@@ -138,6 +138,30 @@ async function main() {
   // =========================================================================
   // Transaction data for Part 1 is stored in the transactions array
   // =========================================================================
+  console.log("=== PART 1: Settle + Claim Fund Fees (wallet-ready transactions) ===");
+  if (transactions.length === 0) {
+    console.log("No fee-settlement transactions generated.");
+  } else {
+    for (const tx of transactions) {
+      console.log(
+        JSON.stringify(
+          {
+            type: "settleAndClaimContinuousFees",
+            vaultProxy: tx.vaultProxy,
+            comptrollerProxy: tx.comptrollerProxy,
+            continuousFees: tx.continuousFees,
+            walletTx: {
+              to: UNPERMISSIONED_ACTIONS_WRAPPER,
+              data: tx.txData,
+              value: "0",
+            },
+          },
+          null,
+          2,
+        ),
+      );
+    }
+  }
 
   // =========================================================================
   // PART 2: (Optional) Distribute from fee splitters
@@ -196,8 +220,33 @@ async function main() {
   }
 
   // Fee splitter transactions are batched per final recipient
-
-  // Fee splitter transaction data is stored in feeSplitterTransactions array
+  console.log("=== PART 2: Claim From Fee Splitters (wallet-ready transactions) ===");
+  if (feeSplitterTransactions.length === 0) {
+    console.log("No fee-splitter claim transactions generated.");
+  } else {
+    for (const recipientBatch of feeSplitterTransactions) {
+      console.log(`Final recipient: ${recipientBatch.finalRecipient}`);
+      for (const tx of recipientBatch.batch) {
+        console.log(
+          JSON.stringify(
+            {
+              type: "claimFromFeeSplitter",
+              finalRecipient: recipientBatch.finalRecipient,
+              vaultProxy: tx.vaultProxy,
+              feeSplitter: tx.feeSplitter,
+              walletTx: {
+                to: tx.feeSplitter,
+                data: tx.txData,
+                value: "0",
+              },
+            },
+            null,
+            2,
+          ),
+        );
+      }
+    }
+  }
 
   // =========================================================================
   // SUMMARY: Transaction data is stored in transactions and feeSplitterTransactions arrays
